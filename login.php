@@ -1,5 +1,5 @@
 <?php require_once 'includes/header.php'; ?>
 
 <body>
-    <h1>Login Page</h1>
+    <h2>Login Page</h2>
 </body>
