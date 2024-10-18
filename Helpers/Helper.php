@@ -13,4 +13,11 @@ final class Helper
     {
         return $value === null;
     }
+
+    public static function generateCsrfToken(string $formName): string {
+        if (empty($_SESSION['csrf_tokens'][$formName])) {
+            $_SESSION['csrf_tokens'][$formName] = bin2hex(random_bytes(32));
+        }
+        return $_SESSION['csrf_tokens'][$formName];
+    }
 }

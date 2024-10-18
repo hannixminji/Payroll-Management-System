@@ -14,8 +14,13 @@ class DepartmentValidator
         return '';
     }
 
-    public function isValidName(string $name)
+    private function validateName(string $name): string
     {
-        //
+        return '';
+    }
+
+    private function validateDescription(string $description): string
+    {
+        return '';
     }
 }
