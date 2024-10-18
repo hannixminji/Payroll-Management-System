@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php';
+use App\Helpers\Helper;
 // Define an array of data
 $data = [
     ["Name" => "Alice", "Age" => 28, "City" => "New York"],
@@ -8,8 +10,8 @@ $data = [
 ];
 
 $result = [
-    'success' => true,
-    'message' => 'Okay'
+    'success' => false,
+    'message' => Helper::generateCsrfToken('okie')
 ];
 
 include_once 'okay.php';

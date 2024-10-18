@@ -1,5 +1,5 @@
 <?php if ($result['success'] === false): ?>
-    <h1>Error Daw Awit Yan</h1>
+    <h1><?php echo $result['message'] ?></h1>
 <?php endif; ?>
 
 <table border="1" cellpadding="10" cellspacing="0">

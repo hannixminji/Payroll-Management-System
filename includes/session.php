@@ -9,8 +9,3 @@ foreach ($cookiesConfig as $option => $value) {
 }
 
 session_start();
-
-if ( ! isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] === false) {
-    header('Location: ../login.php');
-    exit;
-}

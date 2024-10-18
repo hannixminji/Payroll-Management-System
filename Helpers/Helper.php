@@ -20,4 +20,11 @@ final class Helper
         }
         return $_SESSION['csrf_tokens'][$formName];
     }
+
+    public static function validateCsrfToken(string $formName, string $token): bool {
+        if (isset($_SESSION['csrf_tokens'][$formName]) && hash_equals($_SESSION['csrf_tokens'][$formName], $token)) {
+            return true;
+        }
+        return false;
+    }
 }

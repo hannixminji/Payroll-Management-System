@@ -31,5 +31,5 @@ try {
     );
 } catch (PDOException $exception) {
     error_log('Database Connection Error: Unable to connect to the database. ' .
-        'Exception Message: ' . $exception->getMessage());
+              'Exception Message: ' . $exception->getMessage());
 }

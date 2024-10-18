@@ -17,10 +17,10 @@ try {
 
 } catch (InvalidPathException $exception) {
     error_log('Dotenv Error: Invalid path encountered while loading environment variables. ' .
-        'Exception Message: ' . $exception->getMessage());
+              'Exception Message: ' . $exception->getMessage());
 } catch (ValidationException $exception) {
     error_log('Dotenv Error: Validation failed for required environment variables. ' .
-        'Exception Message: ' . $exception->getMessage());
+              'Exception Message: ' . $exception->getMessage());
 }
 
 return [
