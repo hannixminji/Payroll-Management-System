@@ -11,7 +11,7 @@ class DepartmentRepository
         $this->pdo = $pdo;
     }
 
-    public function add(Department $department): void
+    public function add(Department $department, int $userId)
     {
         $query = '
             INSERT INTO departments (
@@ -36,14 +36,18 @@ class DepartmentRepository
             $statement = $this->pdo->prepare($query);
 
             $statement->execute([
-                $department->getName            (),
-                $department->getDepartmentHeadId(),
-                $department->getDescription     (),
-                $department->getStatus          (),
+                ':name'               => $department->getName(),
+                ':department_head_id' => $department->getDepartmentHeadId(),
+                ':description'        => $department->getDescription(),
+                ':status'             => $department->getStatus(),
+                ':created_by'         => $userId,
+                ':updated_by'         => $userId
             ]);
 
         } catch (PDOException $exception) {
-            //
+
+        } finally {
+            $statement = null;
         }
     }
 }
