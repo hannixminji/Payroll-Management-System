@@ -1,4 +1,4 @@
-<?php require_once '/../includes/header.php'; ?>
+<?php require_once '../includes/header.php'; ?>
 
 <body>
     <h2>Department Page</h2>
