@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Sort Departments</title>
+    <style>
+        /* Basic styling */
+        label, select, button {
+            margin: 10px 0;
+            display: block;
+        }
+
+        .sort-level {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Departments Page</h1>
+
+    <form id="sortForm">
+        <!-- The first sort level -->
+        <div class="sort-level">
+            <label for="sortBy1">Sort By:</label>
+            <select name="sortBy" id="sortBy1">
+                <option value="name">Name</option>
+                <option value="status">Status</option>
+                <option value="dateCreated">Date Created</option>
+                <option value="dateModified">Date Modified</option>
+            </select>
+
+            <label for="sortDirection1">Sort Direction:</label>
+            <select name="sortDirection" id="sortDirection1">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </div>
+
+        <!-- Container for additional "Then By" sort levels -->
+        <div id="additionalSortLevels"></div>
+
+        <!-- Button to add more sorting levels -->
+        <button type="button" onclick="addSortLevel()">Add 'Then By'</button>
+
+        <!-- Group By option at the bottom of the form -->
+        <div class="group-by">
+            <label for="groupBy">Group By:</label>
+            <select name="groupBy" id="groupBy">
+                <option value="none">(None)</option>
+                <option value="name">Name</option>
+                <option value="status">Status</option>
+                <option value="dateCreated">Date Created</option>
+                <option value="dateModified">Date Modified</option>
+            </select>
+        </div>
+
+        <!-- Submit button -->
+        <button type="button" onclick="getSortValues()">Submit</button>
+    </form>
+
+    <script>
+        let sortLevelCount = 1;
+
+        // Function to dynamically add a new "Then By" sort level
+        function addSortLevel() {
+            sortLevelCount++;
+            const additionalSortLevels = document.getElementById('additionalSortLevels');
+
+            // Create a new div for the next sort level
+            const newSortLevel = document.createElement('div');
+            newSortLevel.className = 'sort-level';
+            newSortLevel.innerHTML = `
+                <label for="sortBy${sortLevelCount}">Then By:</label>
+                <select name="sortBy" id="sortBy${sortLevelCount}">
+                    <option value="name">Name</option>
+                    <option value="status">Status</option>
+                    <option value="dateCreated">Date Created</option>
+                    <option value="dateModified">Date Modified</option>
+                </select>
+
+                <label for="sortDirection${sortLevelCount}">Sort Direction:</label>
+                <select name="sortDirection" id="sortDirection${sortLevelCount}">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            `;
+
+            // Append the new sort level to the container
+            additionalSortLevels.appendChild(newSortLevel);
+        }
+
+        // Function to get the values of all sort levels, including Group By
+        function getSortValues() {
+            const sortValues = [];
+
+            // Loop through all sort levels
+            for (let i = 1; i <= sortLevelCount; i++) {
+                const sortBy = document.getElementById(`sortBy${i}`).value;
+                const sortDirection = document.getElementById(`sortDirection${i}`).value;
+
+                // Push the selected values into the array
+                sortValues.push({
+                    sortBy: sortBy,
+                    sortDirection: sortDirection
+                });
+            }
+
+            // Get the selected group by value and add it to the array
+            const groupBy = document.getElementById('groupBy').value;
+            sortValues.push({ groupBy: groupBy });
+
+            // Display the selected values in the console (for demonstration purposes)
+            console.log(sortValues);
+
+            // You can return these values or send them to a server, etc.
+            return sortValues;
+        }
+    </script>
+
+</body>
+</html>
