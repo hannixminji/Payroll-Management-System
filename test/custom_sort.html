@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Multi-Level Sort UI</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .sort-controls {
+            margin-bottom: 10px;
+        }
+
+        .sort-levels {
+            margin-top: 10px;
+        }
+
+        .sort-levels div {
+            margin-bottom: 5px;
+        }
+
+        .sort-levels button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sort-controls">
+        <h3>Custom Sort - Add Levels</h3>
+        <div class="sort-levels" id="sort-levels">
+            <!-- Sort levels will be dynamically added here -->
+        </div>
+        <button onclick="addSortLevel()">Add Sort Level</button>
+        <button onclick="sortTable()">Sort</button>
+    </div>
+
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>City</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>John</td>
+                <td>28</td>
+                <td>New York</td>
+            </tr>
+            <tr>
+                <td>Jane</td>
+                <td>22</td>
+                <td>San Francisco</td>
+            </tr>
+            <tr>
+                <td>Emily</td>
+                <td>35</td>
+                <td>Los Angeles</td>
+            </tr>
+            <tr>
+                <td>Mark</td>
+                <td>29</td>
+                <td>Chicago</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        let sortLevels = [];
+
+        function addSortLevel() {
+            const level = sortLevels.length + 1;
+            const sortLevelsContainer = document.getElementById("sort-levels");
+
+            const levelDiv = document.createElement("div");
+            levelDiv.id = `sort-level-${level}`;
+
+            const columnSelect = document.createElement("select");
+            columnSelect.innerHTML = `
+                <option value="0">Name</option>
+                <option value="1">Age</option>
+                <option value="2">City</option>
+            `;
+
+            const orderSelect = document.createElement("select");
+            orderSelect.innerHTML = `
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            `;
+
+            levelDiv.innerHTML = `
+                <label for="level-${level}-column">Level ${level} Column:</label>
+            `;
+            levelDiv.appendChild(columnSelect);
+
+            levelDiv.innerHTML += `
+                <label for="level-${level}-order">Order:</label>
+            `;
+            levelDiv.appendChild(orderSelect);
+
+            sortLevelsContainer.appendChild(levelDiv);
+
+            // Add the sort level to our array
+            sortLevels.push({ column: 0, order: 'asc' });
+
+            columnSelect.addEventListener('change', function() {
+                sortLevels[level - 1].column = parseInt(this.value);
+            });
+
+            orderSelect.addEventListener('change', function() {
+                sortLevels[level - 1].order = this.value;
+            });
+        }
+
+        function sortTable() {
+            const table = document.getElementById("data-table");
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+            rows.sort((a, b) => {
+                for (let i = 0; i < sortLevels.length; i++) {
+                    const column = sortLevels[i].column;
+                    const order = sortLevels[i].order;
+                    const aText = a.cells[column].innerText;
+                    const bText = b.cells[column].innerText;
+
+                    let comparison = 0;
+                    if (!isNaN(aText) && !isNaN(bText)) {
+                        comparison = parseFloat(aText) - parseFloat(bText);
+                    } else {
+                        comparison = aText.localeCompare(bText);
+                    }
+
+                    if (comparison !== 0) {
+                        return order === 'asc' ? comparison : -comparison;
+                    }
+                }
+                return 0;  // All levels equal, no need to change the row order
+            });
+
+            // Re-append sorted rows
+            rows.forEach(row => {
+                table.querySelector('tbody').appendChild(row);
+            });
+        }
+    </script>
+
+</body>
+</html>

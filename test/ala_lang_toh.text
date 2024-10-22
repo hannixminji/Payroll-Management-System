@@ -1,0 +1,409 @@
+<?php
+
+    public function add(Department $department, int $userId): int
+    {
+        $query = '
+            INSERT INTO departments (
+                name,
+                department_head_id,
+                description,
+                status,
+                created_by,
+                updated_by
+            )
+            VALUES (
+                :name,
+                :department_head_id,
+                :description,
+                :status,
+                :created_by,
+                :updated_by
+            )
+        ';
+
+        try {
+            $statement = $this->pdo->prepare($query);
+
+            $statement->execute([
+                ':name'               => $department->getName(),
+                ':department_head_id' => $department->getDepartmentHeadId(),
+                ':description'        => $department->getDescription(),
+                ':status'             => $department->getStatus(),
+                ':created_by'         => $userId,
+                ':updated_by'         => $userId
+            ]);
+
+            return SUCCESS;
+
+        } catch (PDOException $exception) {
+            error_log('Database Error: An error occurred while adding the department. ' .
+                      'Exception: ' . $exception->getMessage());
+
+            if ($exception->getCode() === self::DUPLICATE_ENTRY_ERROR_CODE) {
+                return DUPLICATE_ENTRY_ERROR;
+            }
+
+            return FAILURE;
+        }
+    }
+
+    public function get(
+    ): int {
+    }
+
+    public function update(Department $department, int $userId): int
+    {
+        $query = '
+            UPDATE departments
+            SET
+                name = :name,
+                department_head_id = :department_head_id,
+                description = :description,
+                status = :status,
+                updated_by = :updated_by
+            WHERE
+                id = :id
+        ';
+
+        try {
+            $statement = $this->pdo->prepare($query);
+
+            $statement->execute([
+                ':id'                 => $department->getId(),
+                ':name'               => $department->getName(),
+                ':department_head_id' => $department->getDepartmentHeadId(),
+                ':description'        => $department->getDescription(),
+                ':status'             => $department->getStatus(),
+                ':updated_by'         => $userId
+            ]);
+
+            return SUCCESS;
+
+        } catch (PDOException $exception) {
+            error_log('Database Error: An error occurred while updating the department. ' .
+                      'Exception: ' . $exception->getMessage());
+
+            if ($exception->getCode() === self::DUPLICATE_ENTRY_ERROR_CODE) {
+                return DUPLICATE_ENTRY_ERROR;
+            }
+
+            return FAILURE;
+        }
+    }
+
+    public function softDelete(int $departmentId, int $userId): int
+    {
+        $query = '
+            UPDATE departments
+            SET
+                status = "Archived",
+                deleted_at = NOW(),
+                deleted_by = :deleted_by
+            WHERE
+                id = :id
+        ';
+
+        try {
+            $statement = $this->pdo->prepare($query);
+
+            $statement->execute([
+                ':id'         => $departmentId,
+                ':deleted_by' => $userId
+            ]);
+
+            return SUCCESS;
+
+        } catch (PDOException $exception) {
+            error_log('Database Error: An error occurred while soft deleting the department. ' .
+                      'Exception: ' . $exception->getMessage());
+
+            return FAILURE;
+        }
+    }
+
+$currentPage
+$numberOfEntriesPerPage
+$offset
+
+$searchTerm
+
+$sortBy
+$sortDirection
+$groupBy
+
+$filter
+
+Number of entries = [10, 20, 50, 100, custom]
+Pagination
+Search Box
+Sort By
+    Name
+    Status
+    Date Created
+    Date Modified
+Sort Direction
+    Ascending
+    Descending
+Group By
+    (None)
+    Name
+    Status
+    Date Created
+    Date Modified
+Filter By
+    All
+    Status
+        - Active
+        - Inactive
+        - Archived
+    Date Created
+        - Start Date
+        - End Date
+    Date Modified
+        - Start Date
+        - End Date
+
+id
+name
+department_head_id
+description
+status
+created_at
+created_by
+updated_at
+updated_by
+deleted_at
+deleted_by
+
+Number of entries per page: [10, 20, 50, 100, custom] [Default Value: 10] good
+Pagination: [Default current page: 1] good
+Search Box: [Default Value: '']
+
+Sort By: [Name, Status, Date Created, Date Modified] [Default Value: Name]
+Sort Direction: [Ascending, Descending] [Default Value: Ascending]
+Group By: [Name, Status, Date Created, Date Modified] [Default Value: Date Created]
+
+Filter By: [All, Status (Active, Inactive, Archived), Date Created (Start and end date), Date Modified (Start and end date)] [Default Value: All]
+
+<?php
+
+$query = '
+    SELECT
+        *
+    FROM departments
+    WHERE 1
+
+';
+
+
+
+
+
+<?php
+
+    public function add(Department $department, int $userId): int
+    {
+        $query = '
+            INSERT INTO departments (
+                name,
+                department_head_id,
+                description,
+                status,
+                created_by,
+                updated_by
+            )
+            VALUES (
+                :name,
+                :department_head_id,
+                :description,
+                :status,
+                :created_by,
+                :updated_by
+            )
+        ';
+
+        try {
+            $this->pdo->beginTransaction();
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->execute([
+                ':name'               => $department->getName(),
+                ':department_head_id' => $department->getDepartmentHeadId(),
+                ':description'        => $department->getDescription(),
+                ':status'             => $department->getStatus(),
+                ':created_by'         => $userId,
+                ':updated_by'         => $userId
+            ]);
+
+            $this->pdo->commit();
+
+            return SUCCESS;
+
+        } catch (PDOException $exception) {
+            $this->pdo->rollBack();
+
+            error_log('Database Error: An error occurred while adding the department. ' .
+                      'Exception: ' . $exception->getMessage());
+
+            if ($exception->getCode() === self::DUPLICATE_ENTRY_ERROR_CODE) {
+                return DUPLICATE_ENTRY_ERROR;
+            }
+
+            return FAILURE;
+        }
+    }
+
+    public function update(Department $department, int $userId): int
+    {
+        $query = '
+            UPDATE departments
+            SET
+                name = :name,
+                department_head_id = :department_head_id,
+                description = :description,
+                status = :status,
+                updated_by = :updated_by
+            WHERE
+                id = :id
+        ';
+
+        try {
+            $this->pdo->beginTransaction();
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->execute([
+                ':id'                 => $department->getId(),
+                ':name'               => $department->getName(),
+                ':department_head_id' => $department->getDepartmentHeadId(),
+                ':description'        => $department->getDescription(),
+                ':status'             => $department->getStatus(),
+                ':updated_by'         => $userId
+            ]);
+
+            $this->pdo->commit();
+
+            return SUCCESS;
+
+        } catch (PDOException $exception) {
+            $this->pdo->rollBack();
+
+            error_log('Database Error: An error occurred while updating the department. ' .
+                      'Exception: ' . $exception->getMessage());
+
+            if ($exception->getCode() === self::DUPLICATE_ENTRY_ERROR_CODE) {
+                return DUPLICATE_ENTRY_ERROR;
+            }
+
+            return FAILURE;
+        }
+    }
+
+    public function softDelete(int $departmentId, int $userId): int
+    {
+        $query = '
+            UPDATE departments
+            SET
+                status = "Archived",
+                deleted_at = NOW(),
+                deleted_by = :deleted_by
+            WHERE
+                id = :id
+        ';
+
+        try {
+            $this->pdo->beginTransaction();
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->execute([
+                ':id'         => $departmentId,
+                ':deleted_by' => $userId
+            ]);
+
+            $this->pdo->commit();
+
+            return SUCCESS;
+
+        } catch (PDOException $exception) {
+            $this->pdo->rollBack();
+
+            error_log('Database Error: An error occurred while deleting the department. ' .
+                      'Exception: ' . $exception->getMessage());
+
+            return FAILURE;
+        }
+    }
+
+<?php
+
+    public function fetchRecords(
+          string $searchTerm   ,
+        ? array  $filter       ,
+          string $sortBy       ,
+          string $sortDirection,
+          int    $limit        ,
+          int    $offset
+    ): int|array {
+        $query = "
+            SELECT
+                department.name        AS department_name       ,
+                department_head.id     AS department_head_id    ,
+                department_head.name   AS department_head_name  ,
+                department.description AS department_description,
+                department.status      AS department_status     ,
+                department.created_at  AS created_at            ,
+                created_by_admin.name  AS created_by            ,
+                department.updated_at  AS updated_at            ,
+                updated_by_admin.name  AS updated_by            ,
+                department.deleted_at  AS deleted_at            ,
+                deleted_by_admin.name  AS deleted_by
+            FROM
+                departments AS department
+            LEFT JOIN
+                employees AS department_head ON department.department_head_id = department_head.id
+            LEFT JOIN
+                admins AS created_by_admin ON department.created_by = created_by_admin.id
+            LEFT JOIN
+                admins AS updated_by_admin ON department.updated_by = updated_by_admin.id
+            LEFT JOIN
+                admins AS deleted_by_admin ON department.deleted_by = deleted_by_admin.id
+            WHERE 1
+        ";
+
+        if ( ! empty($searchTerm)) {
+            $query .= " AND department.name LIKE :search_term";
+        }
+
+        $query .= "
+            ORDER BY
+                {$sortBy} {$sortDirection}
+            LIMIT
+                :limit
+            OFFSET
+                :offset
+        ";
+
+        try {
+            $statement = $this->pdo->prepare($query);
+
+            if ( ! empty($searchTerm)) {
+                $statement->bindValue(":search_term", "%{$searchTerm}%", PDO::PARAM_STR);
+            }
+
+            $statement->bindValue(":limit" , $limit , PDO::PARAM_INT);
+            $statement->bindValue(":offset", $offset, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        } catch (PDOException $exception) {
+            error_log("Database Error: An error occurred while fetching the department records. " .
+                      "Exception: {$exception->getMessage()}");
+
+            return FAILURE;
+        }
+    }
+

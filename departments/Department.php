@@ -2,7 +2,7 @@
 
 class Department
 {
-    private   int    $id              ;
+    private ? int    $id              ;
     private   string $name            ;
     private ? int    $departmentHeadId;
     private ? string $description     ;
@@ -10,14 +10,14 @@ class Department
 
     public function __construct(array $department)
     {
-        $this->id               = $department['id'              ];
-        $this->name             = $department['name'            ];
-        $this->departmentHeadId = $department['departmentHeadId'];
-        $this->description      = $department['description'     ];
-        $this->status           = $department['status'          ];
+        $this->id               = $department['id'              ] ?? null;
+        $this->name             = $department['name'            ] ?? ''  ;
+        $this->departmentHeadId = $department['departmentHeadId'] ?? null;
+        $this->description      = $department['description'     ] ?? null;
+        $this->status           = $department['status'          ] ?? ''  ;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
